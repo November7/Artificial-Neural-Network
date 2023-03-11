@@ -24,8 +24,7 @@ class Neuron:
         self.m_output = 0
         self.m_dentrites = []
 
-        #creating connections between neurons of layer n and n-1        
-       
+        #creating connections between neurons of layer n and n-1       
         for neuron in neuronsInLayer:
                 self.m_dentrites.append(Dendrite(neuron))
 
@@ -39,7 +38,9 @@ class Neuron:
         else:
             self.activationFunction = self.sigmoid #default
     
-    
+    def setOutput(self,val):
+        self.m_output = val
+
     def sigmoid(self, val) -> float:
         return 1 / (1 + math.exp(-val))
 
@@ -72,15 +73,28 @@ class MLP:
         self.m_layers = []
         for neuronsCount in topology:
             currentLayer = []
-
+            #add last layer or none if its first layer
             prevLayer = self.m_layers[-1] if self.m_layers else []
-            
+            #add neurons to layer
             for i in range(neuronsCount):
                 currentLayer.append(Neuron(prevLayer))
 
             #bias??
-
             self.m_layers.append(currentLayer)
+    
+    def setInputs(self,inputs) -> None:
+        if len(self.m_layers[0]) != len(inputs): 
+            print("Size of inputs data does not match to size of input layer!")
+            return
+
+        for i,n in zip(inputs,self.m_layers[0]):
+            print(f"{i:.2f}",end=", ")
+            n.setOutput(i)  #not sure!
+            print()
+
+    def forwardPropagation(self) -> float:
+        pass
+        
 
     def Print(self) -> None:
         i = 1
@@ -99,8 +113,11 @@ class MLP:
             
 
 network = MLP([2,5,2])
-
 network.Print()
+
+network.setInputs([0,0])
+
+
     
 
     
