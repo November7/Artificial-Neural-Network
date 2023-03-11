@@ -5,7 +5,7 @@ class Dendrite:
     def __init__(self,connectedNeuron) -> None:
         self.m_connectedNeuron = connectedNeuron
         self.m_weight = random.random() #0 # a random value?
-        self.m_dweight = 0 # back propagation weight?
+        self.m_dWeight = 0 # back propagation weight?
     
     def fwdPropagation(self) -> float:
         return self.m_connectedNeuron.getOutput() * self.m_weight
@@ -15,13 +15,15 @@ class Dendrite:
         self.m_connectedNeuron.addError(self.m_weight * gradient)
 
     def updateWeights(self, eta, gradient, alpha) -> None:
-        self.m_dweight = eta * gradient * self.m_connectedNeuron.m_output + alpha * self.m_dweight 
-        self.m_weight += self.m_dweight
+        
+        self.m_dWeight = eta * gradient * self.m_connectedNeuron.m_output + alpha * self.m_dWeight 
+        self.m_weight += self.m_dWeight
+       # print("UP",gradient, eta, alpha, self.m_weight, self.m_dWeight)
 
         
 
 class Neuron:
-    def __init__(self, neuronsInLayer = [], eta = .001, alpha = .01, activationFunction = "sigmoid") -> None:
+    def __init__(self, neuronsInLayer = [], eta = .1, alpha = .01, activationFunction = "sigmoid") -> None:
     
         #neuron parameters
         self.m_eta = eta
@@ -98,7 +100,11 @@ class Neuron:
         for dendrite in self.m_dendrites:
             print(f"W[{i}]: {dendrite.m_weight:.2f}",end=", ")
             i+=1
-        print(f"Error: {self.m_error:.2f}, Gradient: {self.m_gradient:.2f}, Output: {self.m_output:.2f}")
+        i=0
+        for dendrite in self.m_dendrites:
+            print(f"dW[{i}]: {dendrite.m_dWeight:.17f}",end=", ")
+            i+=1
+        print(f" Err: {self.m_error:.2f}, Grd: {self.m_gradient:.2f}, Out: {self.m_output:.2f}")
  
 
 class MLP:
@@ -126,24 +132,24 @@ class MLP:
             #print()
 
     def fwdPropagation(self) -> float:
-        print("FWD:")
-        self.printNetwork()
+        # print("FWD:")
+        # self.printNetwork()
         for layer in self.m_layers[1:]:
             for neuron in layer:
                 neuron.fwdPropagation()
-        self.printNetwork()        
+        # self.printNetwork()        
         return list(i.m_output for i in self.m_layers[-1])
     
     def bckPropagation(self, target = []) -> float:
-        print("BCK:")
-        self.printNetwork()
+        # print("BCK:")
+        # self.printNetwork()
         for neuron, val in zip(self.m_layers[-1],target):
             neuron.setError(val - neuron.getOutput())
 
         for layer in self.m_layers[::-1]:
             for neuron in layer:
                 neuron.bckPropagation()
-        self.printNetwork()
+        # self.printNetwork()
 
     def calcError(self, target = []):
         e = 0
@@ -172,25 +178,37 @@ class MLP:
 import os
 os.system('cls')         
 
-network = MLP([2,3,1])
+network = MLP([2,5,1])
 
 network.printNetwork()
-dane_we = [0,1]
-dane_wy = [1]
+inputData = [[0,0],[0,1],[1,0],[1,1]]
+outputData = [[0],[1],[0],[1]]
 
-
-
-
-for i in range(1,10):
-    print(f"Epoka #{i}")
-    network.setInputs(dane_we)
-    result = network.fwdPropagation()
-#    print(f"Wynik: {result}")
-    network.bckPropagation(dane_wy)
-
-
+epoches = []
+errors = []
+epoch = 0
+while True:
+    err = 0
+    for data,out in zip(inputData,outputData):
+        network.setInputs(data)
+        network.fwdPropagation()
+        network.bckPropagation(out)
+        err += network.calcError(out)
+    if err < .1: break
+    if epoch % 100 == 0:
+        epoches.append(epoch)
+        errors.append(err)
+    epoch+=1
     
+import matplotlib.pyplot as pl
 
+pl.plot(epoches,errors)
+pl.show()
+
+while True:
+    a = int(input())
+    b = int(input())
     
-
+    network.setInputs([a, b])
+    print(network.fwdPropagation())
 
