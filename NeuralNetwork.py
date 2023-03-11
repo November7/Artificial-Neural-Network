@@ -96,14 +96,12 @@ class Neuron:
         self.setError(0)
 
     def printNeuron(self) -> None:
-        i=0
-        for dendrite in self.m_dendrites:
+        for i, dendrite in enumerate(self.m_dendrites):
             print(f"W[{i}]: {dendrite.m_weight:.2f}",end=", ")
-            i+=1
-        # i=0
-        # for dendrite in self.m_dendrites:
+
+        # 
+        # for i, dendrite in enumerate(self.m_dendrites):
         #     print(f"dW[{i}]: {dendrite.m_dWeight:.2f}",end=", ")
-        #     i+=1
         print(f" Err: {self.m_error:.2f}, Grd: {self.m_gradient:.2f}, Out: {self.m_output:.2f}")
  
 
@@ -162,15 +160,14 @@ class MLP:
         # topology = [len(i) for i in self.m_layers]
         # print("Topology: ",topology)
         print("----------------------------------------------------------------------")
-        i = 1
-        for lr in self.m_layers:
-            print(f"Layer #{i}:")
-            j = 1
-            for n in lr:
-                print(f"- Neuron #{j}: ",end="")
+       
+        for i,lr in enumerate(self.m_layers):
+            print(f"Layer #{i+1}:")
+            
+            for j,n in enumerate(lr):
+                print(f"- Neuron #{j+1}: ",end="")
                 n.printNeuron()
-                j+=1
-            i+=1
+                
         print("----------------------------------------------------------------------") 
           
 
@@ -178,25 +175,42 @@ class MLP:
 import os
 os.system('cls')         
 
-network = MLP([3,5,5,1])
 
 #network.printNetwork()
-inputData = [[0,0,0],
-             [0,0,1],
-             [0,1,0],
-             [0,1,1],
-             [1,0,0],
-             [1,0,1],
-             [1,1,0],
-             [1,1,1]]
+# inputData = [[0,0,0],
+#              [0,0,1],
+#              [0,1,0],
+#              [0,1,1],
+#              [1,0,0],
+#              [1,0,1],
+#              [1,1,0],
+#              [1,1,1]]
 
-outputData = [[0],[1],[0],[1],[0],[0],[1],[0]]
+# outputData = [[0],[1],[0],[1],[0],[0],[1],[0]]
+
+# inputData = [[0],[1]]
+# outputData = [[1],[0]]
+
+inputData = [[0,0,0],
+             [1,0,0],
+             [0,1,0],
+             [1,0,1],
+             [1,1,1],
+             [1,1,0],
+             [0,0,1]]
+
+outputData = [[0],[1],[1],[1],[0],[1],[1]]
+
+size = len(inputData[0])
+
+network = MLP([size,5,len(outputData[0])])
+
 
 epoches = []
 errors = []
 epoch = 0
 progress = 0
-terr = .1
+terr = .05
 while True:
     err = 0
     for data,out in zip(inputData,outputData):
@@ -208,7 +222,7 @@ while True:
 
     progress = int(round(100*terr/err,0))
     if epoch % 100 == 0:
-        print(f"\rProgress: {progress}%",end="")
+        print(f"\rProgress: {progress}% ",end="")
         epoches.append(epoch)
         errors.append(err)
     epoch+=1
@@ -220,11 +234,13 @@ while True:
 print()
 network.printNetwork()
 
+testData = []
 while True:
-    a = int(input())
-    b = int(input())
-    c = int(input())
-    
-    network.setInputs([a, b, c])
+    testData.clear()
+    for i in range(size):
+        testData.append(int(input(f"Enter {i+1} value: ")))
+
+
+    network.setInputs(testData)
     print(network.fwdPropagation())
 
