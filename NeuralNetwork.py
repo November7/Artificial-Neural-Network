@@ -64,7 +64,6 @@ class Neuron:
         return val * (1 - val)
 
     def setError(self, val) -> None:    
-        print(f"Error przed: {self.m_error} i po: {val}")    
         self.m_error = val
     
     def addError(self, val) -> None:
@@ -87,14 +86,19 @@ class Neuron:
         self.m_gradient = self.dSigmoid(self.m_output) * self.m_error
 
     def bckPropagation(self) -> float:
+        self.setGradient()
         for dendrite in self.m_dendrites:
+           # print(self.m_eta, self.m_gradient, self.m_alpha)
             dendrite.bckPropagation(self.m_eta, self.m_gradient, self.m_alpha)
+        #print()
         self.setError(0)
 
     def printNeuron(self) -> None:
+        i=0
         for dendrite in self.m_dendrites:
-            print(f"{dendrite.m_weight:.3f}",end=", ")
-        print(f"Error: {self.m_error}, Gradient: {self.m_gradient}, Output: {self.m_output}")
+            print(f"W[{i}]: {dendrite.m_weight:.2f}",end=", ")
+            i+=1
+        print(f"Error: {self.m_error:.2f}, Gradient: {self.m_gradient:.2f}, Output: {self.m_output:.2f}")
  
 
 class MLP:
@@ -122,19 +126,24 @@ class MLP:
             #print()
 
     def fwdPropagation(self) -> float:
+        print("FWD:")
+        self.printNetwork()
         for layer in self.m_layers[1:]:
             for neuron in layer:
                 neuron.fwdPropagation()
+        self.printNetwork()        
         return list(i.m_output for i in self.m_layers[-1])
     
     def bckPropagation(self, target = []) -> float:
+        print("BCK:")
+        self.printNetwork()
         for neuron, val in zip(self.m_layers[-1],target):
-            print("bkg")
             neuron.setError(val - neuron.getOutput())
 
-        for layer in self.m_layers:
+        for layer in self.m_layers[::-1]:
             for neuron in layer:
                 neuron.bckPropagation()
+        self.printNetwork()
 
     def calcError(self, target = []):
         e = 0
@@ -144,34 +153,40 @@ class MLP:
 
 
     def printNetwork(self) -> None:
+        # topology = [len(i) for i in self.m_layers]
+        # print("Topology: ",topology)
+        print("----------------------------------------------------------------------")
         i = 1
-        for neurons in self.m_layers:
-            print(f"Layer-{i} [{len(neurons)} neuron(s)]:")
+        for lr in self.m_layers:
+            print(f"Layer #{i}:")
             j = 1
-            for neuron in neurons:
-                print(f" - Neuron #{j} (input weights): ",end="")
-                neuron.printNeuron()
-                print()
+            for n in lr:
+                print(f"- Neuron #{j}: ",end="")
+                n.printNeuron()
                 j+=1
-            print()
             i+=1
-            
+        print("----------------------------------------------------------------------") 
           
-            
 
-network = MLP([2,5,1])
 
+import os
+os.system('cls')         
+
+network = MLP([2,3,1])
+
+network.printNetwork()
 dane_we = [0,1]
 dane_wy = [1]
 
-for i in range(1,3):
+
+
+
+for i in range(1,10):
     print(f"Epoka #{i}")
-    print("-------------------------------")
     network.setInputs(dane_we)
     result = network.fwdPropagation()
-   # print(f"Wynik: {result}")
+#    print(f"Wynik: {result}")
     network.bckPropagation(dane_wy)
-    network.printNetwork()
 
 
     
