@@ -220,16 +220,16 @@ while True:
         err += network.calcError(out)
     if err < terr: break
 
-    progress = int(round(100*terr/err,0))
-    if epoch % 100 == 0:
-        print(f"\rProgress: {progress}% ",end="")
+    progress = 100*terr/err
+    if epoch % 500 == 0:
+        print(f"\rProgress: {progress:.2f}% ",end="")
         epoches.append(epoch)
         errors.append(err)
+
     epoch+=1
     
-#import matplotlib.pyplot as pl
-#pl.plot(epoches,errors)
-#pl.show()
+
+
 
 print()
 network.printNetwork()
