@@ -100,10 +100,10 @@ class Neuron:
         for dendrite in self.m_dendrites:
             print(f"W[{i}]: {dendrite.m_weight:.2f}",end=", ")
             i+=1
-        i=0
-        for dendrite in self.m_dendrites:
-            print(f"dW[{i}]: {dendrite.m_dWeight:.17f}",end=", ")
-            i+=1
+        # i=0
+        # for dendrite in self.m_dendrites:
+        #     print(f"dW[{i}]: {dendrite.m_dWeight:.2f}",end=", ")
+        #     i+=1
         print(f" Err: {self.m_error:.2f}, Grd: {self.m_gradient:.2f}, Out: {self.m_output:.2f}")
  
 
@@ -178,15 +178,25 @@ class MLP:
 import os
 os.system('cls')         
 
-network = MLP([2,5,1])
+network = MLP([3,5,5,1])
 
-network.printNetwork()
-inputData = [[0,0],[0,1],[1,0],[1,1]]
-outputData = [[0],[1],[0],[1]]
+#network.printNetwork()
+inputData = [[0,0,0],
+             [0,0,1],
+             [0,1,0],
+             [0,1,1],
+             [1,0,0],
+             [1,0,1],
+             [1,1,0],
+             [1,1,1]]
+
+outputData = [[0],[1],[0],[1],[0],[0],[1],[0]]
 
 epoches = []
 errors = []
 epoch = 0
+progress = 0
+terr = .1
 while True:
     err = 0
     for data,out in zip(inputData,outputData):
@@ -194,21 +204,27 @@ while True:
         network.fwdPropagation()
         network.bckPropagation(out)
         err += network.calcError(out)
-    if err < .1: break
+    if err < terr: break
+
+    progress = int(round(100*terr/err,0))
     if epoch % 100 == 0:
+        print(f"\rProgress: {progress}%",end="")
         epoches.append(epoch)
         errors.append(err)
     epoch+=1
     
-import matplotlib.pyplot as pl
+#import matplotlib.pyplot as pl
+#pl.plot(epoches,errors)
+#pl.show()
 
-pl.plot(epoches,errors)
-pl.show()
+print()
+network.printNetwork()
 
 while True:
     a = int(input())
     b = int(input())
+    c = int(input())
     
-    network.setInputs([a, b])
+    network.setInputs([a, b, c])
     print(network.fwdPropagation())
 
