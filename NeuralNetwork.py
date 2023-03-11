@@ -15,7 +15,7 @@ class Dendrite:
         
 
 class Neuron:
-    def __init__(self, layer, eta = .001, alpha = .01, activationFunction = "sigmoid") -> None:
+    def __init__(self, neuronsInLayer = [], eta = .001, alpha = .01, activationFunction = "sigmoid") -> None:
     
         #neuron parameters
         self.m_eta = eta
@@ -25,8 +25,8 @@ class Neuron:
         self.m_dentrites = []
 
         #creating connections between neurons of layer n and n-1        
-        if layer!=None:
-            for neuron in layer:
+       
+        for neuron in neuronsInLayer:
                 self.m_dentrites.append(Dendrite(neuron))
 
         #selecting activation functions:
@@ -64,19 +64,16 @@ class Neuron:
 
     def Print(self) -> None:
         for dentrite in self.m_dentrites:
-            print(dentrite.m_weight)
+            print(f"{dentrite.m_weight:.3f}",end=", ")
  
 
-        
 class MLP:
     def __init__(self, topology) -> None:
         self.m_layers = []
         for neuronsCount in topology:
             currentLayer = []
-            if len(self.m_layers) == 0:
-                prevLayer = None
-            else:
-                prevLayer = self.m_layers[-1]
+
+            prevLayer = self.m_layers[-1] if self.m_layers else []
             
             for i in range(neuronsCount):
                 currentLayer.append(Neuron(prevLayer))
@@ -86,14 +83,22 @@ class MLP:
             self.m_layers.append(currentLayer)
 
     def Print(self) -> None:
+        i = 1
         for neurons in self.m_layers:
+            print(f"Layer-{i} [{len(neurons)} neuron(s)]:")
+            j = 1
             for neuron in neurons:
+                print(f" - Neuron #{j} (input weights): ",end="")
                 neuron.Print()
+                print()
+                j+=1
+            print()
+            i+=1
             
           
             
 
-network = MLP([2,3,1])
+network = MLP([2,5,2])
 
 network.Print()
     
