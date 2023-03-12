@@ -203,7 +203,7 @@ outputData = [[0],[1],[1],[1],[0],[1],[1]]
 
 size = len(inputData[0])
 
-network = MLP([size,5,len(outputData[0])])
+network = MLP([size,6,8,6,len(outputData[0])])
 
 
 epoches = []
