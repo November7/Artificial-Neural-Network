@@ -106,18 +106,21 @@ class Neuron:
  
 
 class MLP:
-    def __init__(self, topology) -> None:
+    def __init__(self, topology = []) -> None:
         self.m_layers = []
         for neuronsCount in topology:
-            currentLayer = []
-            #add last layer or none if its first layer
-            prevLayer = self.m_layers[-1] if self.m_layers else []
-            #add neurons to layer
-            for i in range(neuronsCount):
-                currentLayer.append(Neuron(prevLayer))
+            self.addLayer(neuronsCount)
+    
+    def addLayer(self,neuronsCount,activationFunction = "sigmoid") -> None:
+
+        prevLayer = self.m_layers[-1] if self.m_layers else []
+        currentLayer = []
+        for i in range(neuronsCount):
+            currentLayer.append(Neuron(prevLayer,activationFunction=activationFunction))
 
             #bias??
-            self.m_layers.append(currentLayer)
+        self.m_layers.append(currentLayer)
+
     
     def setInputs(self, inputs) -> None:
         if len(self.m_layers[0]) != len(inputs): 
@@ -169,78 +172,3 @@ class MLP:
                 n.printNeuron()
                 
         print("----------------------------------------------------------------------") 
-          
-
-
-import os
-os.system('cls')         
-
-
-#network.printNetwork()
-# inputData = [[0,0,0],
-#              [0,0,1],
-#              [0,1,0],
-#              [0,1,1],
-#              [1,0,0],
-#              [1,0,1],
-#              [1,1,0],
-#              [1,1,1]]
-
-# outputData = [[0],[1],[0],[1],[0],[0],[1],[0]]
-
-# inputData = [[0],[1]]
-# outputData = [[1],[0]]
-
-inputData = [[0,0,0],
-             [1,0,0],
-             [0,1,0],
-             [1,0,1],
-             [1,1,1],
-             [1,1,0],
-             [0,0,1]]
-
-outputData = [[0],[1],[1],[1],[0],[1],[1]]
-
-size = len(inputData[0])
-
-network = MLP([size,6,8,6,len(outputData[0])])
-
-
-epoches = []
-errors = []
-epoch = 0
-progress = 0
-terr = .05
-while True:
-    err = 0
-    for data,out in zip(inputData,outputData):
-        network.setInputs(data)
-        network.fwdPropagation()
-        network.bckPropagation(out)
-        err += network.calcError(out)
-    if err < terr: break
-
-    progress = 100*terr/err
-    if epoch % 500 == 0:
-        print(f"\rProgress: {progress:.2f}% ",end="")
-        epoches.append(epoch)
-        errors.append(err)
-
-    epoch+=1
-    
-
-
-
-print()
-network.printNetwork()
-
-testData = []
-while True:
-    testData.clear()
-    for i in range(size):
-        testData.append(int(input(f"Enter {i+1} value: ")))
-
-
-    network.setInputs(testData)
-    print(network.fwdPropagation())
-
