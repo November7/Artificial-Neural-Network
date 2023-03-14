@@ -1,6 +1,7 @@
 from NeuralNetwork import MLP
 import os
-         
+
+        
 
 if __name__ == "__main__":
 
@@ -29,7 +30,7 @@ if __name__ == "__main__":
 
     outputData = [[0],[1],[1],[1],[0],[1],[1]]
 
-
+    
 
     os.system('cls')
     size = len(inputData[0])
@@ -41,11 +42,15 @@ if __name__ == "__main__":
     network.addLayer(12,activationFunction="relu")
     network.addLayer(len(outputData[0]),activationFunction="relu")
 
+
     epoches = []
     errors = []
+
+
     epoch = 0
     progress = 0
     terr = .1
+
     while True:
         err = 0
         for data,out in zip(inputData,outputData):
@@ -58,11 +63,9 @@ if __name__ == "__main__":
         progress = 100*terr/err
         if epoch % 100 == 0:
             print(f"\rErr {err:.10f}, Progress: {progress:.2f}% ",end="")
-           # epoches.append(epoch)
-           # errors.append(err)
-
+            epoches.append(epoch)
+            errors.append(err)
         epoch+=1
-        
 
 
 
