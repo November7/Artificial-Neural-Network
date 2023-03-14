@@ -41,10 +41,10 @@ class Neuron:
         #selecting activation functions:
         if activationFunction == "sigmoid":
             self.activationFunction = self.sigmoid
-        elif activationFunction == "step":
-            self.activationFunction = self.step
+        elif activationFunction == "softmax":
+            self.activationFunction = self.softmax
         elif activationFunction == "ReLU":
-            pass
+            self.activationFunction = self.relu
         else:
             self.activationFunction = self.sigmoid #default
     
@@ -58,10 +58,12 @@ class Neuron:
         if val > self.m_stepActivation: return 1
         else: return 0
 
-    def relu(self,val) -> float:
+    def softmax(self,val):
         pass
-
-
+    def relu(self,val) -> float:
+        if val < 0: return 0
+        else: return val 
+        
     def dSigmoid(self, val) -> float:
         return val * (1 - val)
 
