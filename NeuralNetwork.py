@@ -41,8 +41,6 @@ class Neuron:
         #selecting activation functions:
         if activationFunction == "sigmoid":
             self.activationFunction = self.sigmoid
-        elif activationFunction == "softmax":
-            self.activationFunction = self.softmax
         elif activationFunction == "ReLU":
             self.activationFunction = self.relu
         else:
@@ -54,12 +52,6 @@ class Neuron:
     def sigmoid(self, val) -> float:
         return 1 / (1 + math.exp(-val))
 
-    def step(self,val) -> int: #float??
-        if val > self.m_stepActivation: return 1
-        else: return 0
-
-    def softmax(self,val):
-        pass
     def relu(self,val) -> float:
         if val < 0: return 0
         else: return val 
@@ -162,8 +154,6 @@ class MLP:
 
 
     def printNetwork(self) -> None:
-        # topology = [len(i) for i in self.m_layers]
-        # print("Topology: ",topology)
         print("----------------------------------------------------------------------")
        
         for i,lr in enumerate(self.m_layers):
