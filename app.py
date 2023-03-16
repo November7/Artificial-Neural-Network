@@ -39,7 +39,7 @@ if __name__ == "__main__":
     network = MLP()
 
     network.addLayer(size,activationFunction="relu")
-    network.addLayer(12,activationFunction="relu")
+    network.addLayer(5,activationFunction="relu")
     network.addLayer(len(outputData[0]),activationFunction="relu")
 
 
