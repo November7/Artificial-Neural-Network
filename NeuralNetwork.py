@@ -112,12 +112,14 @@ class MLP:
         for i in range(neuronsCount):
             currentLayer.append(Neuron(prevLayer,activationFunction=activationFunction))
 
-            #bias??
+        currentLayer.append(Neuron()) #bias??
+        currentLayer[-1].setOutput(1)
+            
         self.m_layers.append(currentLayer)
 
     
     def setInputs(self, inputs) -> None:
-        if len(self.m_layers[0]) != len(inputs): 
+        if len(self.m_layers[0])-1 != len(inputs): 
             print("Size of inputs data does not match to size of input layer!")
             return
 
@@ -133,7 +135,7 @@ class MLP:
             for neuron in layer:
                 neuron.fwdPropagation()
         # self.printNetwork()        
-        return list(i.m_output for i in self.m_layers[-1])
+        return list(i.m_output for i in self.m_layers[-1])[0:-1]
     
     def bckPropagation(self, target = []) -> float:
         # print("BCK:")

@@ -20,17 +20,51 @@ if __name__ == "__main__":
     # inputData = [[0],[1]]
     # outputData = [[1],[0]]
 
-    inputData = [[0,0,0],
-                [1,0,0],
-                [0,1,0],
-                [1,0,1],
-                [1,1,1],
-                [1,1,0],
-                [0,0,1]]
+    # inputData = [[0,0,0],
+    #             [1,0,0],
+    #             [0,1,0],
+    #             [1,0,1],
+    #             [1,1,1],
+    #             [1,1,0],
+    #             [0,0,1]]
 
-    outputData = [[0],[1],[1],[1],[0],[1],[1]]
+    # outputData = [[0],[1],[1],[1],[0],[1],[1]]
 
-    
+    # inputData = [[0, 0],
+    #              [0, 1],
+    #              [1, 0],
+    #              [1, 1]]
+    # outputData = [[1],
+    #               [0],
+    #               [0],
+    #               [1]]
+
+    # inputData = [[0, 0],
+    #              [0, 1],
+    #              [1, 0],
+    #              [1, 1]]
+    # outputData = [[0,0,0,1],
+    #               [0,0,1,0],
+    #               [0,1,0,0],
+    #               [1,0,0,0]]
+
+    inputData = [[0, 0, 0],
+                 [0, 0, 1],
+                 [0, 1, 0],
+                 [0, 1, 1],
+                 [1, 0, 0],
+                 [1, 0, 1],
+                 [1, 1, 0],
+                 [1, 1, 1]]
+    outputData = [[0,0,0,0,0,0,0,0],
+                  [0,0,0,0,0,0,0,1],
+                  [0,0,0,0,0,0,1,0],
+                  [0,0,0,0,0,1,0,0],
+                  [0,0,0,0,1,0,0,0],
+                  [0,0,0,1,0,0,0,0],
+                  [0,0,1,0,0,0,0,0],
+                  [0,1,0,0,0,0,0,0],
+                  ]
 
     os.system('cls')
     size = len(inputData[0])
@@ -38,9 +72,9 @@ if __name__ == "__main__":
     #network = MLP([size,5,len(outputData[0])])
     network = MLP()
 
-    network.addLayer(size,activationFunction="relu")
-    network.addLayer(5,activationFunction="relu")
-    network.addLayer(len(outputData[0]),activationFunction="relu")
+    network.addLayer(size)
+    network.addLayer(12)
+    network.addLayer(8)
 
 
     epoches = []
@@ -80,7 +114,9 @@ if __name__ == "__main__":
 
 
         network.setInputs(testData)
-        print(network.fwdPropagation())
+        pred = network.fwdPropagation()
+        for i in pred:
+            print(f"{i:.2f}")
 
 
 
