@@ -97,7 +97,16 @@ class Neuron:
         # for i, dendrite in enumerate(self.m_dendrites):
         #     print(f"dW[{i}]: {dendrite.m_dWeight:.2f}",end=", ")
         print(f" Err: {self.m_error:.2f}, Grd: {self.m_gradient:.2f}, Out: {self.m_output:.2f}")
- 
+    
+    def getWeights(self) -> list:
+        dendrites = []
+        for dendrite in self.m_dendrites:
+            dendrites.append(dendrite.m_weight)
+        return dendrites
+    
+    def setWeights(self,weights) -> None:
+        for dendrite, weight in zip(self.m_dendrites,weights):
+            dendrite.m_weight=weight
 
 class MLP:
     def __init__(self, topology = []) -> None:
@@ -166,3 +175,17 @@ class MLP:
                 n.printNeuron()
                 
         print("----------------------------------------------------------------------") 
+
+
+    def saveNetwork(self) -> None:
+        r = []
+        for lr in self.m_layers:
+            l = []
+                        
+            for n in lr:
+                l.append(n.getWeights())
+            r.append(l)
+        return r
+
+    def loadNetwork(self) -> None:
+        pass
