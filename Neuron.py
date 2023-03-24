@@ -8,30 +8,27 @@ class Dendrite:
         self.m_weight = random.random()
         self.m_dWeight = 0
 
-class Neuron:
-    def __init__(self):
+class Layer:
+    def __init__(self,n):
+        self.m_NeuronCount = n
         pass
 
 
-
-class Bias(Neuron):
+class Input(Layer):
     pass
 
-class Input(Neuron):
+class Relu(Layer):
     pass
 
-class Relu(Neuron):
+class Sigmoid(Layer):
     pass
 
-class Sigmoid(Neuron):
-    pass
-
-class SoftMax(Neuron):
+class SoftMax(Layer):
     pass
 
 class Network:
     def addLayer(self,layerClass,neuronCount=1):
-        if not issubclass(layerClass,Neuron): return
+        if not issubclass(layerClass,Layer): return
         
         self.m_neurons = [layerClass] * neuronCount
 
