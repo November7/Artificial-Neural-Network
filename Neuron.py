@@ -13,7 +13,6 @@ class Neuron:
         self.m_dendriteCount = n
         pass
 
-
 class Input(Neuron):
     pass
 
