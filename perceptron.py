@@ -24,7 +24,6 @@ class Perceptron:
                 w = alpha * (y[i] - yd)
                 self.m_bias += w
                 self.m_weights += w*x
-
       
         
         print(self.m_weights, self.m_bias)
