@@ -1,11 +1,13 @@
 from random import random
+import numpy as np
 
 
 class Perceptron:
     def __init__(self,size) -> None:
-        self.m_inputs = [0]*size
-        self.m_weights = random()
+        self.m_inputs = np.zeros(size)
+        self.m_weights = np.random.rand(size)
         print(self.m_inputs)
+        print(self.m_weights)
 
     def fit(self, X, y, epochs = 100):
        
