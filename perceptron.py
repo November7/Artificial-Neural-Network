@@ -25,7 +25,6 @@ class Perceptron:
                 self.m_bias += w
                 self.m_weights += w*x
       
-        
         print(self.m_weights, self.m_bias)
 
         
