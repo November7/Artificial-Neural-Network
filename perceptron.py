@@ -48,7 +48,7 @@ def main():
     ax = fig.add_subplot(1, 1, 1)
 
     plt.scatter(X_train[:, 0], X_train[:, 1], marker=".", c = y_train, cmap="viridis")
-    plt.scatter(X_test[:, 0],X_test[:, 1], marker="*",c = -predictions, cmap="coolwarm")
+    # plt.scatter(X_test[:, 0],X_test[:, 1], marker="*",c = -predictions, cmap="coolwarm")
     x0_1 = np.amin(X_train[:, 0])
     x0_2 = np.amax(X_train[:, 0])
 

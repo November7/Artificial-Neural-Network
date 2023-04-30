@@ -73,7 +73,7 @@ if __name__ == "__main__":
     network = MLP()
 
     network.addLayer(size)
-    network.addLayer(12)
+    network.addLayer(14)
     network.addLayer(8)
 
 
